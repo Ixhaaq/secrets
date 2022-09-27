@@ -9,11 +9,14 @@
   "author": "Ishaaq Malik",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.2",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "lodash": "^4.17.21",
+    "md5": "^2.3.0",
     "mongodb": "^4.10.0",
     "mongoose": "^6.6.2",
     "mongoose-encryption": "^2.1.2"

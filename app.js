@@ -18,7 +18,7 @@ app.use(express.static("public"));
 //////////////////////////////////////SESSION COOKIE////////////////////////
 app.use(
   session({
-    secret: "Our little secret.",
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
   })
@@ -65,29 +65,29 @@ app.get("/register", function (req, res) {
 });
 
 app.get("/secrets", function (req, res) {
-    if (req.isAuthenticated()){
-        res.render("secrets");
-    } else {
-        res.redirect("/login")
-    }
+  if (req.isAuthenticated()) {
+    res.render("secrets");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 app.get("/logout", function (req, res) {
-
-    req.logout((err) => {
-        if(err){
-            console.log(err)
-        }else{
-            res.redirect("/")
-        }
-    });
-    
+  req.logout((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/");
+    }
+  });
 });
 
 //////////////////////////////////POST//////////////////////////////
 
 app.post("/register", function (req, res) {
-  User.register({ username: req.body.username }, req.body.password,
+  User.register(
+    { username: req.body.username },
+    req.body.password,
     function (err, user) {
       if (err) {
         console.log(err);
@@ -102,24 +102,21 @@ app.post("/register", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+  });
 
-    const user = new User ({
-        username: req.body.username,
-        password: req.body.password
-    });
-
-    req.login(user, function(err){
-        if (err){
-            console.log(err);
-        } else {
-            passport.authenticate("local")(req, res, function () {
-                res.redirect("/secrets");
-            });
-        }
-    })
-
+  req.login(user, function (err) {
+    if (err) {
+      console.log(err);
+    } else {
+      passport.authenticate("local")(req, res, function () {
+        res.redirect("/secrets");
+      });
+    }
+  });
 });
-
 
 //////////////////////////////////////////////////LISTEN/////////////
 app.listen(3000, function () {
